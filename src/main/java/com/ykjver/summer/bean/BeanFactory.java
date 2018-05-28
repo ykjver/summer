@@ -5,4 +5,5 @@ package com.ykjver.summer.bean;
  * @date 2018/5/28
  */
 public interface BeanFactory {
+    public Object getBean(String name);
 }
