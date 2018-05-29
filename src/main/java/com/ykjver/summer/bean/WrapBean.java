@@ -6,4 +6,12 @@ package com.ykjver.summer.bean;
  */
 public class WrapBean {
     private Object bean;
+
+    public Object getBean() {
+        return bean;
+    }
+
+    public void setBean(Object bean) {
+        this.bean = bean;
+    }
 }

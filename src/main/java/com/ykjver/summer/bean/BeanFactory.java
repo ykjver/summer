@@ -6,4 +6,5 @@ package com.ykjver.summer.bean;
  */
 public interface BeanFactory {
     public Object getBean(String name);
+    public void loadBeanDefinition(Resource resource);
 }
