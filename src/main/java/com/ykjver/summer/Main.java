@@ -1,9 +1,6 @@
 package com.ykjver.summer;
 
-import com.ykjver.summer.bean.BeanFactory;
-import com.ykjver.summer.bean.BeanFactoryImpl;
-import com.ykjver.summer.bean.FileResource;
-import com.ykjver.summer.bean.Resource;
+import com.ykjver.summer.bean.*;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
@@ -21,9 +18,10 @@ import java.net.URL;
 public class Main {
 
     public static void main(String[] args) throws ParserConfigurationException, IOException, SAXException, ClassNotFoundException, IllegalAccessException, InstantiationException {
-        BeanFactory beanFactory = new BeanFactoryImpl();
-        Resource resource = new FileResource();
-        beanFactory.loadBeanDefinition(resource);
+        ClassPathResource classPathResource = new ClassPathResource("bean.xml");
+        XmlBeanFactory beanFactory = new XmlBeanFactory();
+        XmlBeanDefinitionReader xmlBeanDefinitionReader = new XmlBeanDefinitionReader(beanFactory);
+        xmlBeanDefinitionReader.loadBeanDefinitions(classPathResource);
         Student student = (Student)beanFactory.getBean("student");
         student.say();
     }

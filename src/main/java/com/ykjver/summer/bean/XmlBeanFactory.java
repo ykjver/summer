@@ -1,0 +1,101 @@
+package com.ykjver.summer.bean;
+
+import com.ykjver.summer.core.ClassUtils;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+/**
+ * @author ykjver@gmail.com
+ * @date 2018/5/29
+ */
+public class XmlBeanFactory implements BeanFactory {
+
+    private final Map<String, BeanDefinition> beandefinitions = new HashMap<>(256);
+
+    private final Map<String, Object> singletonObjects = new HashMap<>(256);
+
+    private ClassLoader beanClassLoader = ClassUtils.getDefaultClassLoader();
+
+    @Override
+    public Object getBean(String name) throws RuntimeException {
+        Object bean = null;
+        Object sharedInstance = getSingleton(name);
+        if (sharedInstance != null) {
+            return sharedInstance;
+        }
+        final BeanDefinition bd = getBeanDefinition(name);
+        String[] dependsOn = bd.getDependsOn();
+        if (dependsOn != null) {
+            for (String dep : dependsOn) {
+                getBean(dep);
+            }
+        }
+
+        if(bd.isSingleton()) {
+            bean = createBean(name, bd, null);
+            populateBean(bean, bd);
+        }
+        return bean;
+    }
+
+    private void populateBean(Object bean, BeanDefinition bd) {
+        List<String> properties = bd.getProperties();
+        if (properties != null && !properties.isEmpty()) {
+            properties.stream().forEach(property -> {
+                getBean(property);
+            });
+        }
+    }
+
+    private Object getSingleton(String beanName) {
+        Objects.requireNonNull(beanName, "bean name can not be null");
+        return singletonObjects.get(beanName);
+    }
+
+    private BeanDefinition getBeanDefinition(String beanName) {
+        Objects.requireNonNull(beanName, "bean name can not be null");
+        BeanDefinition bd = beandefinitions.get(beanName);
+        if (bd == null) {
+            throw new RuntimeException("no bean named '" + beanName + "'");
+        }
+        return bd;
+    }
+
+    private Object createBean(String beanName, BeanDefinition bd, Object args) {
+        Class<?> clazz = null;
+        try {
+            clazz = resolveBeanClass(bd);
+            Constructor<?> constructorToUser = clazz.getDeclaredConstructor();
+            return constructorToUser.newInstance();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return clazz;
+    }
+
+    private Class<?> resolveBeanClass(final BeanDefinition bd) throws ClassNotFoundException {
+        ClassLoader clToUse = getBeanClassLoader();
+        String className = bd.getClassName();
+        if (className != null) {
+            return ClassUtils.forName(className, clToUse);
+        }
+        return null;
+    }
+
+    private ClassLoader getBeanClassLoader() {
+        return beanClassLoader;
+    }
+}

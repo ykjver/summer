@@ -1,7 +1,5 @@
 package com.ykjver.summer.bean;
 
-import com.ykjver.summer.Main;
-import com.ykjver.summer.Student;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -11,10 +9,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,7 +52,6 @@ public class BeanFactoryImpl implements BeanFactory{
         return obj;
     }
 
-    @Override
     public void loadBeanDefinition(Resource resource) {
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = null;

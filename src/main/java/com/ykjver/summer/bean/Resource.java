@@ -7,5 +7,5 @@ import java.io.InputStream;
  * @date 2018/5/29
  */
 public interface Resource {
-    public InputStream load();
+    public InputStream getInputStream();
 }

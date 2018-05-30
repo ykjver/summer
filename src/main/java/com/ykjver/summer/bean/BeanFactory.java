@@ -5,6 +5,12 @@ package com.ykjver.summer.bean;
  * @date 2018/5/28
  */
 public interface BeanFactory {
-    public Object getBean(String name);
-    public void loadBeanDefinition(Resource resource);
+
+    String SCOPE_SINGLETON = "singleton";
+
+    String SCOPE_PROTOTYPE = "prototype";
+
+    String SCOPE_DEFAULT = "";
+
+    Object getBean(String name) throws RuntimeException;
 }
