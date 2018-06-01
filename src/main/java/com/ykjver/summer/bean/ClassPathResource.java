@@ -2,7 +2,10 @@ package com.ykjver.summer.bean;
 
 import com.ykjver.summer.core.ClassUtils;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Objects;
 
 /**
@@ -23,6 +26,12 @@ public class ClassPathResource implements Resource{
 
     @Override
     public InputStream getInputStream() {
+        URL resource = classLoader.getResource(path);
+        try {
+            return new FileInputStream(resource.getFile());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 }

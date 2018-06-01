@@ -11,7 +11,7 @@ public class BeanDefinition {
     private String ReferenceName;
     private String className;
     private String[] dependsOn;
-    private String scope;
+    private String scope = "";
     List<String> properties;
 
     public boolean isSingleton() {

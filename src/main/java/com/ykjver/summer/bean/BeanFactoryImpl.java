@@ -53,36 +53,6 @@ public class BeanFactoryImpl implements BeanFactory{
     }
 
     public void loadBeanDefinition(Resource resource) {
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder documentBuilder = null;
-        try {
-            documentBuilder = documentBuilderFactory.newDocumentBuilder();
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        }
-        Document document = null;
-        try {
-            document = documentBuilder.parse(resource.load());
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        NodeList childNodes = document.getChildNodes();
-        Node beansNode = childNodes.item(0);
-        Element beansElement = (Element) beansNode;
-        NodeList beanElList = beansElement.getElementsByTagName("bean");
-        for (int i = 0; i < beanElList.getLength(); i++) {
-            Element item = (Element)beanElList.item(i);
-            String clazzName = item.getAttribute("class");
-            String name = item.getAttribute("name");
-            BeanDefinition beanDefinition = beanDefinitionMap.get(name);
-            if (beanDefinition == null) {
-                beanDefinition = new BeanDefinition();
-                beanDefinition.setName(name);
-                beanDefinition.setReferenceName(clazzName);
-                beanDefinitionMap.put(name, beanDefinition);
-            }
-        }
+
     }
 }

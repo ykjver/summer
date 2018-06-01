@@ -13,7 +13,7 @@ import java.util.Objects;
  * @author ykjver@gmail.com
  * @date 2018/5/29
  */
-public class XmlBeanFactory implements BeanFactory {
+public class XmlBeanFactory implements BeanFactory, BeanDefinitionRegistry {
 
     private final Map<String, BeanDefinition> beandefinitions = new HashMap<>(256);
 
@@ -57,12 +57,15 @@ public class XmlBeanFactory implements BeanFactory {
         return singletonObjects.get(beanName);
     }
 
-    private BeanDefinition getBeanDefinition(String beanName) {
+    @Override
+    public void registryBeanDefinition(String beanName, BeanDefinition beanDefinition) {
+        Objects.requireNonNull(beanName, "bean name must not be null");
+        beandefinitions.put(beanName, beanDefinition);
+    }
+
+    public BeanDefinition getBeanDefinition(String beanName) {
         Objects.requireNonNull(beanName, "bean name can not be null");
         BeanDefinition bd = beandefinitions.get(beanName);
-        if (bd == null) {
-            throw new RuntimeException("no bean named '" + beanName + "'");
-        }
         return bd;
     }
 
