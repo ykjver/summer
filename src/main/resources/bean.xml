@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
 <beans>
-    <bean name="student" class="com.ykjver.summer.Student"></bean>
+    <bean name="student" class="com.ykjver.summer.Student">
+        <property name="name" value="日子越过越长"></property>
+        <!--<property name="id" value="1"></property>-->
+        <!--<property name="age" value="12"></property>-->
+        <!--<property name="gender" value="1"></property>-->
+    </bean>
 </beans>

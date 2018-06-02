@@ -24,5 +24,6 @@ public class Main {
         xmlBeanDefinitionReader.loadBeanDefinitions(classPathResource);
         Student student = (Student)beanFactory.getBean("student");
         student.say();
+        System.out.println(student);
     }
 }

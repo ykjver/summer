@@ -1,6 +1,7 @@
 package com.ykjver.summer.bean;
 
 import com.ykjver.summer.core.ClassUtils;
+import com.ykjver.summer.core.ReflectUtils;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -44,11 +45,19 @@ public class XmlBeanFactory implements BeanFactory, BeanDefinitionRegistry {
     }
 
     private void populateBean(Object bean, BeanDefinition bd) {
-        List<String> properties = bd.getProperties();
-        if (properties != null && !properties.isEmpty()) {
-            properties.stream().forEach(property -> {
-                getBean(property);
-            });
+        Map<String, BeanDefProperty> propertiesMap = bd.getPropertiesMap();
+        if (propertiesMap != null && !propertiesMap.isEmpty()) {
+            for (Map.Entry<String, BeanDefProperty> propertyEntry : propertiesMap.entrySet()) {
+                String name = propertyEntry.getKey();
+                BeanDefProperty property = propertyEntry.getValue();
+                if (!"".equals(property.getRef())) {
+                    getBean(name);
+                } else {
+                    ReflectUtils.setFiledValue(bean.getClass(),
+                            property.getName(),
+                            property.getValue());
+                }
+            }
         }
     }
 

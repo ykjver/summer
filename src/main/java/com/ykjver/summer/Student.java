@@ -11,6 +11,8 @@ public class Student {
     private int age;
     private int gender;
 
+    private Dept dept;
+
     public void say() {
         System.out.println("hello summer");
     }
@@ -45,5 +47,24 @@ public class Student {
 
     public void setGender(int gender) {
         this.gender = gender;
+    }
+
+    public Dept getDept() {
+        return dept;
+    }
+
+    public void setDept(Dept dept) {
+        this.dept = dept;
+    }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                ", gender=" + gender +
+                ", dept=" + dept +
+                '}';
     }
 }

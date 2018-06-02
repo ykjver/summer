@@ -1,5 +1,6 @@
 package com.ykjver.summer.bean;
 
+import com.ykjver.summer.core.ReflectUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -50,6 +51,20 @@ public class XmlBeanDefinitionReader {
             BeanDefinition beanDefinition = beanDefinitionRegistry.getBeanDefinition(name);
             if (beanDefinition == null) {
                 beanDefinition = new BeanDefinition();
+                NodeList propertyList = item.getElementsByTagName("property");
+                if (propertyList != null && propertyList.getLength() > 0) {
+                    for (int j = 0; j < propertyList.getLength(); j++) {
+                        Element propertyEl = (Element)propertyList.item(j);
+                        String propertyName = propertyEl.getAttribute("name");
+                        String propertyValue = propertyEl.getAttribute("value");
+                        String propertyRef = propertyEl.getAttribute("ref");
+                        BeanDefProperty beanDefProperty = new BeanDefProperty();
+                        beanDefProperty.setName(propertyName);
+                        beanDefProperty.setValue(propertyValue);
+                        beanDefProperty.setRef(propertyRef);
+                        beanDefinition.getPropertiesMap().put(propertyName, beanDefProperty);
+                    }
+                }
                 beanDefinition.setName(name);
                 beanDefinition.setReferenceName(clazzName);
                 beanDefinition.setClassName(clazzName);

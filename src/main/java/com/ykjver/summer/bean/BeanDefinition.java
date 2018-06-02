@@ -1,6 +1,9 @@
 package com.ykjver.summer.bean;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author yk
@@ -12,18 +15,26 @@ public class BeanDefinition {
     private String className;
     private String[] dependsOn;
     private String scope = "";
-    List<String> properties;
+    Map<String, BeanDefProperty> propertiesMap = new HashMap<>();
 
     public boolean isSingleton() {
         return BeanFactory.SCOPE_SINGLETON.equals(scope) || BeanFactory.SCOPE_DEFAULT.equals(scope);
     }
 
-    public List<String> getProperties() {
-        return properties;
+    public String getScope() {
+        return scope;
     }
 
-    public void setProperties(List<String> properties) {
-        this.properties = properties;
+    public void setScope(String scope) {
+        this.scope = scope;
+    }
+
+    public Map<String, BeanDefProperty> getPropertiesMap() {
+        return propertiesMap;
+    }
+
+    public void setPropertiesMap(Map<String, BeanDefProperty> propertiesMap) {
+        this.propertiesMap = propertiesMap;
     }
 
     public String getName() {
