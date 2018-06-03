@@ -45,30 +45,33 @@ public class XmlBeanDefinitionReader {
         Element beansElement = (Element) beansNode;
         NodeList beanElList = beansElement.getElementsByTagName("bean");
         for (int i = 0; i < beanElList.getLength(); i++) {
-            Element item = (Element)beanElList.item(i);
-            String clazzName = item.getAttribute("class");
-            String name = item.getAttribute("name");
-            BeanDefinition beanDefinition = beanDefinitionRegistry.getBeanDefinition(name);
-            if (beanDefinition == null) {
-                beanDefinition = new BeanDefinition();
-                NodeList propertyList = item.getElementsByTagName("property");
-                if (propertyList != null && propertyList.getLength() > 0) {
-                    for (int j = 0; j < propertyList.getLength(); j++) {
-                        Element propertyEl = (Element)propertyList.item(j);
-                        String propertyName = propertyEl.getAttribute("name");
-                        String propertyValue = propertyEl.getAttribute("value");
-                        String propertyRef = propertyEl.getAttribute("ref");
-                        BeanDefProperty beanDefProperty = new BeanDefProperty();
-                        beanDefProperty.setName(propertyName);
-                        beanDefProperty.setValue(propertyValue);
-                        beanDefProperty.setRef(propertyRef);
-                        beanDefinition.getPropertiesMap().put(propertyName, beanDefProperty);
+            Node node = beanElList.item(i);
+            if (node instanceof Element) {
+                Element item = (Element)node;
+                String clazzName = item.getAttribute("class");
+                String name = item.getAttribute("name");
+                BeanDefinition beanDefinition = beanDefinitionRegistry.getBeanDefinition(name);
+                if (beanDefinition == null) {
+                    beanDefinition = new BeanDefinition();
+                    NodeList propertyList = item.getElementsByTagName("property");
+                    if (propertyList != null && propertyList.getLength() > 0) {
+                        for (int j = 0; j < propertyList.getLength(); j++) {
+                            Element propertyEl = (Element)propertyList.item(j);
+                            String propertyName = propertyEl.getAttribute("name");
+                            String propertyValue = propertyEl.getAttribute("value");
+                            String propertyRef = propertyEl.getAttribute("ref");
+                            BeanDefProperty beanDefProperty = new BeanDefProperty();
+                            beanDefProperty.setName(propertyName);
+                            beanDefProperty.setValue(propertyValue);
+                            beanDefProperty.setRef(propertyRef);
+                            beanDefinition.getPropertiesMap().put(propertyName, beanDefProperty);
+                        }
                     }
+                    beanDefinition.setName(name);
+                    beanDefinition.setReferenceName(clazzName);
+                    beanDefinition.setClassName(clazzName);
+                    beanDefinitionRegistry.registryBeanDefinition(name, beanDefinition);
                 }
-                beanDefinition.setName(name);
-                beanDefinition.setReferenceName(clazzName);
-                beanDefinition.setClassName(clazzName);
-                beanDefinitionRegistry.registryBeanDefinition(name, beanDefinition);
             }
         }
     }
