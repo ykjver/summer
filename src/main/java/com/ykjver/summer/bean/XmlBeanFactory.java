@@ -1,14 +1,12 @@
 package com.ykjver.summer.bean;
 
+import com.ykjver.summer.bean.exception.CreateBeanException;
 import com.ykjver.summer.core.ClassUtils;
 import com.ykjver.summer.core.ReflectUtils;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author ykjver@gmail.com
@@ -19,6 +17,8 @@ public class XmlBeanFactory implements BeanFactory, BeanDefinitionRegistry {
     private final Map<String, BeanDefinition> beandefinitions = new HashMap<>(256);
 
     private final Map<String, Object> singletonObjects = new HashMap<>(256);
+
+    private final Set<String> beansOnCreate = new HashSet<>(16);
 
     private ClassLoader beanClassLoader = ClassUtils.getDefaultClassLoader();
 
@@ -33,6 +33,11 @@ public class XmlBeanFactory implements BeanFactory, BeanDefinitionRegistry {
         String[] dependsOn = bd.getDependsOn();
         if (dependsOn != null) {
             for (String dep : dependsOn) {
+                if (beansOnCreate.contains(name)) {
+                    throw new CreateBeanException("circle depend, bean name: "
+                            + dep + ", depend: " + name);
+                }
+                beansOnCreate.add(name);
                 getBean(dep);
             }
         }
@@ -42,6 +47,7 @@ public class XmlBeanFactory implements BeanFactory, BeanDefinitionRegistry {
             populateBean(bean, bd);
         }
         singletonObjects.put(name, bean);
+        beansOnCreate.remove(name);
         return bean;
     }
 

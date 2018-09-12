@@ -5,12 +5,10 @@ package com.ykjver.summer;
  * @date 2018/5/29
  */
 public class Student {
-
     private int id;
     private String name;
     private int age;
     private int gender;
-
     private Dept dept;
 
     public void say() {
