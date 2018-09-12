@@ -41,6 +41,7 @@ public class XmlBeanFactory implements BeanFactory, BeanDefinitionRegistry {
             bean = createBean(name, bd, null);
             populateBean(bean, bd);
         }
+        singletonObjects.put(name, bean);
         return bean;
     }
 
@@ -50,10 +51,10 @@ public class XmlBeanFactory implements BeanFactory, BeanDefinitionRegistry {
             for (Map.Entry<String, BeanDefProperty> propertyEntry : propertiesMap.entrySet()) {
                 String name = propertyEntry.getKey();
                 BeanDefProperty property = propertyEntry.getValue();
-                if (!"".equals(property.getRef())) {
-                    getBean(name);
+                if (property.getRef() != null && !property.getRef().isEmpty()) {
+                    ReflectUtils.setFieldRefValue(bean, property.getRef(), getBean(property.getRef()));
                 } else {
-                    ReflectUtils.setFiledValue(bean.getClass(),
+                    ReflectUtils.setFiledValue(bean,
                             property.getName(),
                             property.getValue());
                 }

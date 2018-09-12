@@ -2,8 +2,9 @@
 Wheel of Spring
 
 
-## T0d0
+## TODO
 1. fileSystem ioc container
 2. autowire
 3. xml bean definition
 4. singleton, prototype
+5. aop

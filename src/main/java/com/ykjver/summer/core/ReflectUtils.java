@@ -1,5 +1,6 @@
 package com.ykjver.summer.core;
 
+import com.ykjver.summer.bean.exception.CreateBeanException;
 import sun.jvm.hotspot.debugger.Page;
 
 import java.lang.reflect.Field;
@@ -13,7 +14,11 @@ public class ReflectUtils {
         try {
             Class<?> clazz = bean.getClass();
             Field declaredField = clazz.getDeclaredField(propertyName);
-            if (declaredField != null) {
+            declaredField.setAccessible(true);
+            if (declaredField.getType() == Integer.class
+                    || declaredField.getType().getName().equals("int")) {
+                declaredField.setInt(bean, Integer.valueOf(propertyValue));
+            } else {
                 declaredField.setAccessible(true);
                 declaredField.set(bean, propertyValue);
             }
@@ -21,6 +26,20 @@ public class ReflectUtils {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void setFieldRefValue(Object bean, String fieldName, Object fieldVal) {
+        if (fieldName == null || fieldName.isEmpty()) {
+            throw new CreateBeanException("fieldName can't be empty");
+        }
+        try {
+            Field field;
+            field = bean.getClass().getDeclaredField(fieldName);
+            field.setAccessible(true);
+            field.set(bean, fieldVal);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new CreateBeanException(e);
         }
     }
 }

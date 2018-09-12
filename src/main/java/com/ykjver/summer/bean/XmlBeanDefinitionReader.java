@@ -11,6 +11,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author ykjver@gmail.com
@@ -51,6 +53,7 @@ public class XmlBeanDefinitionReader {
                 String clazzName = item.getAttribute("class");
                 String name = item.getAttribute("name");
                 BeanDefinition beanDefinition = beanDefinitionRegistry.getBeanDefinition(name);
+                ArrayList<String> dependOnList = new ArrayList<>();
                 if (beanDefinition == null) {
                     beanDefinition = new BeanDefinition();
                     NodeList propertyList = item.getElementsByTagName("property");
@@ -60,6 +63,9 @@ public class XmlBeanDefinitionReader {
                             String propertyName = propertyEl.getAttribute("name");
                             String propertyValue = propertyEl.getAttribute("value");
                             String propertyRef = propertyEl.getAttribute("ref");
+                            if(propertyRef != null && !propertyRef.isEmpty()) {
+                                dependOnList.add(propertyRef);
+                            }
                             BeanDefProperty beanDefProperty = new BeanDefProperty();
                             beanDefProperty.setName(propertyName);
                             beanDefProperty.setValue(propertyValue);
@@ -70,6 +76,9 @@ public class XmlBeanDefinitionReader {
                     beanDefinition.setName(name);
                     beanDefinition.setReferenceName(clazzName);
                     beanDefinition.setClassName(clazzName);
+                    if (!dependOnList.isEmpty()) {
+                        beanDefinition.setDependsOn(dependOnList.toArray(new String[dependOnList.size()]));
+                    }
                     beanDefinitionRegistry.registryBeanDefinition(name, beanDefinition);
                 }
             }
