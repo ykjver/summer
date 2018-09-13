@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
 <beans>
-    <bean name="student" class="com.ykjver.summer.Student">
+    <bean name="student" class="com.ykjver.summer.app.Student">
         <property name="name" value="日子越过越长"></property>
         <property name="id" value="1"></property>
         <property name="age" value="12"></property>
         <property name="gender" value="1"></property>
         <property ref="dept"></property>
     </bean>
-    <bean name="dept" class="com.ykjver.summer.Dept">
+    <bean name="dept" class="com.ykjver.summer.app.Dept">
         <property name="id" value="1024"></property>
         <property name="name" value="winter"></property>
     </bean>

@@ -1,4 +1,4 @@
-package com.ykjver.summer;
+package com.ykjver.summer.app;
 
 /**
  * @author ykjver@gmail.com

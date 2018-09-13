@@ -1,9 +1,12 @@
-package com.ykjver.summer;
+package com.ykjver.summer.app;
+
+import com.ykjver.summer.bean.anno.Bean;
 
 /**
  * @author yk
  * @date 2018/5/29
  */
+@Bean
 public class Student {
     private int id;
     private String name;

@@ -13,7 +13,7 @@ public class BeanDefinition {
     private String name;
     private String ReferenceName;
     private String className;
-    private String[] dependsOn;
+    private String[] dependsOn = new String[0];
     private String scope = "";
     Map<String, BeanDefProperty> propertiesMap = new HashMap<>();
 

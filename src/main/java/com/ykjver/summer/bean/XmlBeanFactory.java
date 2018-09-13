@@ -30,6 +30,9 @@ public class XmlBeanFactory implements BeanFactory, BeanDefinitionRegistry {
             return sharedInstance;
         }
         final BeanDefinition bd = getBeanDefinition(name);
+        if (bd == null) {
+            throw new CreateBeanException("bean is not exist, beanName: " + name);
+        }
         String[] dependsOn = bd.getDependsOn();
         if (dependsOn != null) {
             for (String dep : dependsOn) {
@@ -79,6 +82,7 @@ public class XmlBeanFactory implements BeanFactory, BeanDefinitionRegistry {
         beandefinitions.put(beanName, beanDefinition);
     }
 
+    @Override
     public BeanDefinition getBeanDefinition(String beanName) {
         Objects.requireNonNull(beanName, "bean name can not be null");
         BeanDefinition bd = beandefinitions.get(beanName);
