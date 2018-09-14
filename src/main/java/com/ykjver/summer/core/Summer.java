@@ -6,9 +6,12 @@ import com.ykjver.summer.bean.BeanDefinitionRegistry;
 import com.ykjver.summer.bean.BeanFactory;
 import com.ykjver.summer.bean.XmlBeanFactory;
 import com.ykjver.summer.bean.anno.Bean;
+import com.ykjver.summer.bean.anno.Inject;
 import com.ykjver.summer.bean.exception.CreateBeanException;
 
 import java.io.File;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +34,7 @@ public class Summer {
         this.beanFactory = beanFactory;
         refresh(kclass, beanFactory);
         System.out.println(beanFactory.getBean("student"));
+        System.out.println(beanFactory.getBean("dept"));
     }
 
     private void refresh(Class resource, BeanDefinitionRegistry beanDefinitionRegistry) {
@@ -54,9 +58,24 @@ public class Summer {
                 beanName = String.valueOf(chars);
             }
         }
+        Field[] declaredFields = klass.getDeclaredFields();
+        ArrayList<String> dependOnList = new ArrayList<>();
+        for (Field declaredField : declaredFields) {
+            Inject inject = declaredField.getDeclaredAnnotation(Inject.class);
+            if (inject != null) {
+                String injectName = inject.name();
+                if (StringUtils.isNotBlank(injectName)) {
+                    dependOnList.add(injectName);
+                } else {
+                    String fieldName = declaredField.getName();
+                    dependOnList.add(fieldName);
+                }
+            }
+        }
         BeanDefinition bd = new BeanDefinition();
         bd.setName(beanName);
         bd.setClassName(klass.getName());
+        bd.setDependsOn(dependOnList.toArray(new String[dependOnList.size()]));
         return bd;
     }
 

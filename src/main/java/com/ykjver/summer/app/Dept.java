@@ -1,12 +1,16 @@
 package com.ykjver.summer.app;
 
+import com.ykjver.summer.bean.anno.Bean;
+
 /**
  * @author ykjver@gmail.com
  * @date 2018/6/2
  */
+@Bean
 public class Dept {
 
     private int id;
+
     private String name;
 
     public int getId() {

@@ -1,6 +1,7 @@
 package com.ykjver.summer.app;
 
 import com.ykjver.summer.bean.anno.Bean;
+import com.ykjver.summer.bean.anno.Inject;
 
 /**
  * @author yk
@@ -12,6 +13,7 @@ public class Student {
     private String name;
     private int age;
     private int gender;
+    @Inject
     private Dept dept;
 
     public void say() {

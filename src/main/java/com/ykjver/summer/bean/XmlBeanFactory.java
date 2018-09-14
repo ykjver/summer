@@ -69,6 +69,11 @@ public class XmlBeanFactory implements BeanFactory, BeanDefinitionRegistry {
                 }
             }
         }
+
+        String[] dependsOn = bd.getDependsOn();
+        for (String s : dependsOn) {
+            ReflectUtils.setFieldRefValue(bean, s, getBean(s));
+        }
     }
 
     private Object getSingleton(String beanName) {
