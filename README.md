@@ -18,4 +18,6 @@ Resource -> Application -> run -> prepareContext -> load(Application, sources[])
 -> BeanDefinitionLoader -> load -> packageScan -> PathMatchingResourcePatternResolver
 ->
 
+
+
 ```
