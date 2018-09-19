@@ -1,5 +1,8 @@
 package com.ykjver.summer.core;
 
+import com.ykjver.summer.bean.exception.CreateBeanException;
+
+import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,6 +44,17 @@ public class ClassUtils {
             return (clToUse != null ? clToUse.loadClass(name) : Class.forName(name));
         } catch (ClassNotFoundException ex) {
             throw ex;
+        }
+    }
+
+
+    public static Object createBeanByConstructor(String className, Class[] args) {
+        Class<?> klass = null;
+        try {
+            klass = forName(className, getDefaultClassLoader());
+            return klass.newInstance();
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            throw new CreateBeanException("instantiate class fail, class name: " + className);
         }
     }
 }

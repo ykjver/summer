@@ -95,23 +95,10 @@ public class XmlBeanFactory implements BeanFactory, BeanDefinitionRegistry {
     }
 
     private Object createBean(String beanName, BeanDefinition bd, Object args) {
-        Class<?> clazz = null;
-        try {
-            clazz = resolveBeanClass(bd);
-            Constructor<?> constructorToUser = clazz.getDeclaredConstructor();
-            return constructorToUser.newInstance();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
-        return clazz;
+        Object bean = ClassUtils.createBeanByConstructor(bd.getClassName(), null);
+
+
+        return bean;
     }
 
     private Class<?> resolveBeanClass(final BeanDefinition bd) throws ClassNotFoundException {
